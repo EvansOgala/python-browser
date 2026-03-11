@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.evans.PythonBrowser</id>
+  <name>Python Browser</name>
+  <summary>GTK4 web browser with profiles, local history, bookmarks, and session restore</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <launchable type="desktop-id">org.evans.PythonBrowser.desktop</launchable>
+  <provides>
+    <binary>org.evans.PythonBrowser</binary>
+  </provides>
+  <description>
+    <p>
+      Python Browser is a local-first GTK4 desktop browser with tabbed browsing,
+      profile switching, saved sign-ins, persistent history and bookmarks, and
+      automatic session restore.
+    </p>
+  </description>
+  <developer id="org.evans">
+    <name>Evans</name>
+  </developer>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.0.0" date="2026-03-09"/>
+  </releases>
+</component>

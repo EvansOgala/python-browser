@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Python Browser
+Comment=GTK4 web browser with local profiles and persistent sessions
+Exec=org.evans.PythonBrowser
+Icon=org.evans.PythonBrowser
+Terminal=false
+Categories=Network;WebBrowser;
+StartupNotify=true
