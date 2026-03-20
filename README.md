@@ -1,75 +1,83 @@
-# Python Browser (GTK4 + WebKit)
+# Disk Health Monitor
 
-Local-first GTK4 browser with profiles, persistent sign-ins, and session restore.
+Disk health utility for SMART checks, drive status review, and trend history.
 
 ## Features
 
-- Rounded GTK4 UI with Material-style theming
-- Multi-tab browsing
-- Back/forward/reload/stop/home controls
-- URL + search bar
-- Keyboard shortcuts: `Ctrl+L`, `Ctrl+T`, `Ctrl+W`, `Ctrl+R`, `Ctrl+H`
-- Multiple profiles with isolated local data
-- Persistent cookies/sign-ins per profile
-- Local history, bookmarks, and tab session restore
-- Download handling to `~/Downloads`
-
-## Data location
-
-All browser data is local only under:
-
-- `~/.local/share/python-browser`
-
-Per profile:
-
-- `profiles/<profile-slug>/webkit-data`
-- `profiles/<profile-slug>/webkit-cache`
-- `profiles/<profile-slug>/cookies.sqlite`
-- `profiles/<profile-slug>/history.db`
-- `profiles/<profile-slug>/bookmarks.json`
-- `profiles/<profile-slug>/session.json`
+- Detects local block devices
+- SMART health checks for SATA/SAS drives
+- NVMe SMART log checks for NVMe drives
+- Temperature and health trend snapshots
+- Launch detailed SMART command output in terminal
+- Linux: GTK4 UI
+- Windows: PySide6 UI
 
 ## Dependencies
 
 ### Runtime
 
 - Python 3.11+
+
+Linux stack:
+
 - GTK4 + PyGObject
-- WebKitGTK for GTK4 (`WebKit 6.0` GI namespace)
-- libsoup3
+- `smartmontools` (`smartctl`)
+- `nvme-cli` (`nvme`) for NVMe details
+- A supported terminal emulator (`x-terminal-emulator`, `gnome-terminal`, `konsole`, `xfce4-terminal`, `kitty`, `alacritty`, or `xterm`)
+- Optional: `pkexec` for privileged reads without starting the app as root
+
+Windows stack:
+
+- PySide6 (Qt)
+- Recommended: `smartctl` in `PATH` for SMART health/temperature data
+- Optional: `psutil` for richer disk enumeration
+
+Install `smartctl` on Windows:
+
+```powershell
+winget install smartmontools.smartmontools
+```
+
+Then run Disk Health Monitor from an elevated terminal (Run as Administrator) for best SMART access.
+
+The Windows app can also prompt to relaunch itself as Administrator when SMART access is blocked.
 
 ### Install dependencies by distro
 
 #### Arch Linux / Nyarch
 
 ```bash
-sudo pacman -S --needed python python-gobject gtk4 webkitgtk-6.0 libsoup3
+sudo pacman -S --needed python python-gobject gtk4 smartmontools nvme-cli polkit xterm
 ```
 
 #### Debian / Ubuntu
 
 ```bash
 sudo apt update
-sudo apt install -y python3 python3-gi gir1.2-gtk-4.0 gir1.2-webkit-6.0 libsoup-3.0-0
+sudo apt install -y python3 python3-gi gir1.2-gtk-4.0 smartmontools nvme-cli policykit-1 xterm
 ```
 
 #### Fedora
 
 ```bash
-sudo dnf install -y python3 python3-gobject gtk4 webkitgtk6.0 libsoup3
+sudo dnf install -y python3 python3-gobject gtk4 smartmontools nvme-cli polkit xterm
 ```
 
 ## Run from source
 
+### Linux
+
 ```bash
-cd /home/'your username'/Documents/python-browser
+cd /home/'your username'/Documents/disk-health-monitor
 python3 main.py
 ```
 
-Optional debug mode (enables devtools + JS console logs):
+### Windows
 
-```bash
-PYTHON_BROWSER_DEBUG=1 python3 main.py
+```powershell
+cd C:\Users\your-username\Documents\disk-health-monitor
+py -m pip install PySide6 psutil
+py main.py
 ```
 
 ## Build AppImage
@@ -88,9 +96,18 @@ Install `appimagetool` in `PATH`, or place one of these files in `./tools/`:
 ### Build command
 
 ```bash
-cd /home/'your username'/Documents/python-browser
+cd /home/'your username'/Documents/disk-health-monitor
 chmod +x build-appimage.sh
 ./build-appimage.sh
 ```
 
 The script outputs an `.AppImage` file in the project root.
+
+## Build Windows (PyInstaller)
+
+```powershell
+cd C:\Users\your-username\Documents\disk-health-monitor
+build-windows.bat
+```
+
+The executable is emitted into `dist\DiskHealthMonitor\`.
